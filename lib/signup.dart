@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SignupPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>(); 
 
@@ -52,7 +53,8 @@ class SignupPage extends StatelessWidget {
                     child: Column(
                       children: [
                         
-                        TextField(
+                  TextFormField(
+                   controller: _nameController,
                           decoration: InputDecoration(
                             labelText: 'Full Name',
                             border: OutlineInputBorder(
@@ -60,6 +62,12 @@ class SignupPage extends StatelessWidget {
                             ),
                             prefixIcon: Icon(Icons.person),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'name is required';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 20),
                         

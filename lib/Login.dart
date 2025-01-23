@@ -5,7 +5,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>(); // Key for form validation
 
-  @override
+ 
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -96,7 +96,7 @@ class LoginPage extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/forgot-password');
+                        Navigator.pushNamed(context, '/forget');
                       },
                       child: Text(
                         "Forget Password?",
@@ -108,9 +108,11 @@ class LoginPage extends StatelessWidget {
                   
                   // Login Button with form validation
                   GestureDetector(
-                    onTap: () {
+                    onTap: () 
+                    {
                       // Validate the form and navigate if valid
-                      if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) 
+                      {
                         Navigator.pushNamed(context, '/home');
                       }
                     },
