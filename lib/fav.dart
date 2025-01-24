@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FavPage extends StatelessWidget {
-  
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
 
-Widget build(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-   return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-         automaticallyImplyLeading: false, // Rem
+        automaticallyImplyLeading: false, // Removes the back arrow
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -18,57 +18,109 @@ Widget build(BuildContext context) {
               height: screenWidth * 0.1,
             ),
             SizedBox(width: 10), // Space between logo and text
-            // "TravelMate" Text
+            // "Fav" Text
             Text(
-              " Fav",
+              "Favorites",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           ],
         ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-         // Removes the back arrow
-        
+        backgroundColor: Colors.white, // Set white background for AppBar
+        elevation: 1, // Add subtle shadow for separation
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             
-            SizedBox(height: 30),
-          
-            SizedBox(height: 10),
-            ListTile(
-              leading: Image.asset('assets/your_actual_image_name.jpg', width: 70),
-              title: Text('Bali, Indonesia'),
-              subtitle: Text('Visited March 2025'),
+            SizedBox(height: 20),
+            Text(
+              ' Favorite Destinations',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Divider(),
-            ListTile(
-              leading: Image.asset('assets/your_actual_image_name.jpg', width: 70),
-              title: Text('Santorini, Greece'),
-              subtitle: Text('Visited January 2025'),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView(
+                children: [
+                  // First favorite item
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/destination_details');
+                    },
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                      child: Image.asset(
+                        'assets/your_actual_image_name.jpg',
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(
+                      'Bali, Indonesia',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  ),
+                  Divider(thickness: 1),
+                  // Second favorite item
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/destination_details');
+                    },
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                      child: Image.asset(
+                        'assets/your_actual_image_name.jpg',
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(
+                      'Santorini, Greece',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, 
+        backgroundColor: Colors.white, // White background for the navbar
+        selectedItemColor: const Color.fromARGB(255, 52, 27, 97), // Selected item color
+        unselectedItemColor: Colors.grey, // Unselected items color
+        currentIndex: 2, // Set "Fav" as active
         onTap: (index) {
           if (index == 0) {
-            Navigator.pushNamed(context, '/home');
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/profile');
+            Navigator.pushNamed(context, '/home'); // Navigate to Home page
+          } else if (index == 1) {
+            Navigator.pushNamed(context, '/search'); // Navigate to Search page
+          } else if (index == 3) {
+            Navigator.pushNamed(context, '/profile'); // Navigate to Profile page
           }
         },
         items: [
-          
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.star_outlined), label: "Fav "),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile "),
+          BottomNavigationBarItem(icon: Icon(Icons.search_sharp), label: "Search"),
+          BottomNavigationBarItem(icon: Icon(Icons.star_outlined), label: "Fav"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
