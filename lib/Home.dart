@@ -27,6 +27,15 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+            IconButton(
+            icon: Icon(Icons.notifications_none), // Bell icon
+            onPressed: () {
+              Navigator.pushNamed(context, '/notp');
+            },
+          ),
+        ],
+
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         automaticallyImplyLeading: false, // Removes the back arrow
       ),
@@ -41,15 +50,16 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
+
               // Destination 1
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    '/destination_details',
+                    '/bali',
                     arguments: {
                       "title": "Bali Paradise Resort",
-                      "image": 'assets/llogo.png',
+                      "image": 'assets/bali.jpg',
                       "description":
                           "Experience the perfect blend of beaches, culture, and spirituality in this tropical paradise.",
                     },
@@ -60,7 +70,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset(
-                        'assets/llogo.png',
+                        'assets/bali.jpg',
                         width: double.infinity,
                         height: 150,
                         fit: BoxFit.cover,
@@ -80,7 +90,8 @@ class HomePage extends StatelessWidget {
                             SizedBox(height: 8),
                             Text(
                               "Experience the perfect blend of beaches, culture, and spirituality in this tropical paradise.",
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ],
                         ),
@@ -90,17 +101,18 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+
               // Destination 2
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    '/destination_details',
+                    '/sidi',
                     arguments: {
-                      "title": "Santorini, Greece",
-                      "image": 'assets/llogo.png',
+                      "title": "Sidi Bousaid, Tunis",
+                      "image": 'assets/Sidi.jpg',
                       "description":
-                          "Discover stunning sunsets and iconic white architecture on this magical Greek island.",
+                          "Discover Sidi Bou Said with stunning views, local charm, and authentic cuisine. Relax or explore—the perfect escape awaits.",
                     },
                   );
                 },
@@ -109,7 +121,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset(
-                        'assets/llogo.png',
+                        'assets/Sidi.jpg',
                         width: double.infinity,
                         height: 150,
                         fit: BoxFit.cover,
@@ -120,7 +132,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Santorini, Greece",
+                              "Sidi bousaid, Tunis",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -128,8 +140,9 @@ class HomePage extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              "Discover stunning sunsets and iconic white architecture on this magical Greek island.",
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              "Discover Sidi Bou Said with stunning views, local charm, and authentic cuisine. Relax or explore—the perfect escape awaits.",
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ],
                         ),
@@ -139,17 +152,18 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+
               // Destination 3
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    '/destination_details',
+                    '/paris',
                     arguments: {
-                      "title": "Kyoto, Japan",
-                      "image": 'assets/kyoto.png',
+                      "title": "Paris, France",
+                      "image": 'assets/paris.jpg',
                       "description":
-                          "Explore ancient temples, serene gardens, and the captivating culture of Japan’s former imperial capital.",
+                          "Experience Paris with elegant stays, iconic views, and exquisite cuisine. Relax or explore—the city of lights awaits.",
                     },
                   );
                 },
@@ -158,7 +172,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset(
-                        'assets/llogo.png',
+                        'assets/paris.jpg',
                         width: double.infinity,
                         height: 150,
                         fit: BoxFit.cover,
@@ -169,7 +183,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Kyoto, Japan",
+                              "paris, France",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -177,8 +191,60 @@ class HomePage extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              "Explore ancient temples, serene gardens, and the captivating culture of Japan’s former imperial capital.",
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              "Experience Paris with elegant stays, iconic views, and exquisite cuisine. Relax or explore—the city of lights awaits.",
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+
+              // Destination 4
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/destination_details',
+                    arguments: {
+                      "title": "Istanbul, Turkey",
+                      "image": 'assets/istabul.jpg',
+                      "description":
+                          "Discover Sidi Bou Said with stunning views, local charm, and authentic cuisine. Relax or explore—the perfect escape awaits.",
+                    },
+                  );
+                },
+                child: Card(
+                  elevation: 4,
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/istunbul.jpg',
+                        width: double.infinity,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Istanbul , Turkey",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "Experience Istanbul with luxurious stays, breathtaking views, and rich culture. Relax or explore—an unforgettable adventure awaits.",
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ],
                         ),
@@ -193,7 +259,8 @@ class HomePage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white, // White background for the navbar
-        selectedItemColor: const Color.fromARGB(255, 52, 27, 97), // Selected item color
+        selectedItemColor:
+            const Color.fromARGB(255, 52, 27, 97), // Selected item color
         unselectedItemColor: Colors.grey, // Unselected items color
         currentIndex: 0, // Set "Home" as active
         onTap: (index) {
@@ -207,9 +274,9 @@ class HomePage extends StatelessWidget {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search_sharp), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.star_outlined), label: "Fav"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem( icon: Icon(Icons.search_sharp), label: "Search"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Fav"),
+          BottomNavigationBarItem(icon: Image.asset('assets/avv.png', width: 24,height: 24,),label: "Profile ",),
         ],
       ),
     );
