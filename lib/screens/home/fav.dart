@@ -37,7 +37,7 @@ class FavPage extends StatelessWidget {
             IconButton(
             icon: Icon(Icons.notifications_none), // Bell icon
             onPressed: () {
-              Navigator.pushNamed(context, '/notif');
+              Navigator.pushNamed(context, '/notp');
             },
           ),
         ],

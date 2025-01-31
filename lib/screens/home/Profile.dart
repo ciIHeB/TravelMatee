@@ -108,43 +108,11 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
-                  // Sign Out Button
-                  GestureDetector(
-                    onTap: () {
-                      // You can handle sign-out logic here (e.g., clearing session, Firebase sign-out, etc.)
-                      // For example:
-                      // FirebaseAuth.instance.signOut();
-                      Navigator.pushReplacementNamed(context, '/login');
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 39, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.red, // Red color for sign-out button
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.exit_to_app, // Sign-out icon
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8), // Space between icon and text
-                          Text(
-                            "Sign Out",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                
+                        
+                      
+                    
+                
                 ],
               ),
             ),

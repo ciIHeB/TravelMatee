@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import '/Splash_screen.dart';
-import '/Login.dart';
-import '/signup.dart';
-import '/forget.dart';
-import '/Home.dart';
-import '/check.dart';
-import 'Profile.dart';
-import 'fav.dart';
-import 'search.dart';
-import 'istanbul.dart';
-import 'booking.dart';
-import 'edit.dart';
-import 'paris.dart';
-import 'bali.dart';
-import 'sidi.dart';
-import 'setting.dart';
-import 'notification.dart';
+import 'screens/auth/Splash_screen.dart';
+import 'screens/auth/Login.dart';
+import 'screens/auth/signup.dart';
+import 'screens/auth/forget.dart';
+import 'screens/home/Home.dart';
+import 'screens/auth/check.dart';
+import 'screens/home/Profile.dart';
+import 'screens/home/fav.dart';
+import 'screens/home/search.dart';
+import 'screens/destinations/istanbul.dart';
+import 'screens/booking/booking.dart';
+import 'screens/edit/edit.dart';
+import 'screens/destinations/paris.dart';
+import 'screens/destinations/bali.dart';
+import 'screens/destinations/sidi.dart';
+import 'screens/settings/setting.dart';
+import 'screens/settings/notification.dart';
 
 void main() {
   runApp(TravelMateApp());

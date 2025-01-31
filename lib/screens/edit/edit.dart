@@ -36,7 +36,8 @@ class EditProfilePage extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/llogo.png'),
+                      backgroundImage: AssetImage('assets/avv.png'),
+                      backgroundColor: Colors.transparent,
                     ),
                     Positioned(
                       bottom: 0,
@@ -97,7 +98,7 @@ class EditProfilePage extends StatelessWidget {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 120, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Color(0xFF4F58FD), Color(0xFF149BF3)],

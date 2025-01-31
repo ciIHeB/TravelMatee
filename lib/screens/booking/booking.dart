@@ -116,7 +116,7 @@ class BookingPage extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 120, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [Color(0xFF4F58FD), Color(0xFF149BF3)],

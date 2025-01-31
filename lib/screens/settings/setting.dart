@@ -12,17 +12,8 @@ class settp extends StatelessWidget {
         child: ListView(
           children: [
             // Profile Settings Section
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text("Profile Settings"),
-              subtitle: Text("Update your profile information."),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                // Navigate to profile settings
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-            Divider(),
+            
+            
             
             // Notifications Settings Section
             ListTile(
@@ -46,18 +37,9 @@ class settp extends StatelessWidget {
                 // Action for language settings
               },
             ),
-            Divider(),
             
-            // Privacy Settings Section
-            ListTile(
-              leading: Icon(Icons.lock),
-              title: Text("Privacy Settings"),
-              subtitle: Text("Adjust your privacy preferences."),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                // Action for privacy settings
-              },
-            ),
+            
+            
             Divider(),
             
             // Logout Section
@@ -67,7 +49,7 @@ class settp extends StatelessWidget {
               subtitle: Text("Sign out of your account."),
               trailing: Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
-                // Perform logout action
+               Navigator.pushReplacementNamed(context, '/login');
               },
             ),
           ],
