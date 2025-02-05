@@ -16,8 +16,16 @@ import 'screens/destinations/bali.dart';
 import 'screens/destinations/sidi.dart';
 import 'screens/settings/setting.dart';
 import 'screens/settings/notification.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+    print("Firebase initialized: ${Firebase.app().options}");
+  } catch (e) {
+    print("Error initializing Firebase: $e");
+  }
   runApp(TravelMateApp());
 }
 
@@ -38,13 +46,13 @@ class TravelMateApp extends StatelessWidget {
         '/profile': (context) => ProfilePage(),
         '/fav': (context) => FavPage(),
         '/destination_details': (context) => DestinationDetailsPage(),
-        '/edit': (context) => EditProfilePage(), // Add this line
-        '/booking': (context) => BookingPage(), // A
+        '/edit': (context) => EditProfilePage(),
+        '/booking': (context) => BookingPage(),
         '/paris': (context) => parispage(),
         '/bali': (context) => balipage(),
         '/sidi': (context) => sidipage(),
-        '/setting':(context)=> settp(),
-        '/notp':(context)=> notp(),
+        '/setting': (context) => settp(),
+        '/notp': (context) => notp(),
       },
     );
   }

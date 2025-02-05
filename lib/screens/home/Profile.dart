@@ -1,28 +1,78 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String _name = "Loading...";
+  File? _profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+    _loadProfileImage();
+  }
+
+  
+
+  // Charger le nom de l'utilisateur depuis Firestore
+  Future<void> _fetchUserProfile() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('profile').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _name = userDoc['name'] ?? 'No Name';
+        });
+      }
+    }
+  }
+
+  // Charger l'image de profil stockée localement
+  Future<void> _loadProfileImage() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final localImagePath = '${directory.path}/profile_pic.png';
+    final file = File(localImagePath);
+
+    if (await file.exists()) {
+      setState(() {
+        _profileImage = file;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User? user = _auth.currentUser;
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes the back arrow
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Logo
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/home'); // Navigate to /home route
+                Navigator.pushNamed(context, '/home');
               },
               child: Image.asset(
                 'assets/llogo.png',
-                width: screenWidth * 0.1, // Adjust logo size
+                width: screenWidth * 0.1,
                 height: screenWidth * 0.1,
               ),
             ),
-            SizedBox(width: 10), // Space between logo and text
-            // "Profile" Text
+            SizedBox(width: 10),
             Text(
               "Profile",
               style: TextStyle(
@@ -40,7 +90,7 @@ class ProfilePage extends StatelessWidget {
             },
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,22 +101,29 @@ class ProfilePage extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
-                    radius: 50, // Adjust the size of the circle
-                    backgroundImage: AssetImage('assets/avv.png'),
+                    radius: 50,
+                    backgroundImage: _profileImage != null
+                        ? FileImage(_profileImage!)
+                        : AssetImage('assets/avv.png') as ImageProvider,
                     backgroundColor: Colors.transparent,
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    'Chaaouri iheb',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  FutureBuilder(
+                    future: _fetchUserProfile(),
+                    builder: (context, snapshot) {
+                      return Text(
+                        _name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
                   Text(
-                    'chaaouriiheb@Gmail.com',
+                    user?.email ?? 'No email found',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 51, 50, 50),
+                      color: Colors.grey[800],
                     ),
                   ),
                   SizedBox(height: 20),
@@ -90,11 +147,11 @@ class ProfilePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.edit, // Icon for the button
+                            Icons.edit,
                             color: Colors.white,
                             size: 20,
                           ),
-                          SizedBox(width: 8), // Space between icon and text
+                          SizedBox(width: 8),
                           Text(
                             "Edit Profile",
                             style: TextStyle(
@@ -108,11 +165,6 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
-                
-                        
-                      
-                    
-                
                 ],
               ),
             ),
@@ -125,71 +177,11 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, '/sidi');
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-                child: Image.asset(
-                  'assets/Sidi.jpg',
-                  width: 70,
-                  height: 70,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: Text('Sidi bousaid, Tunis'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Visited March 2024'),
-                  SizedBox(height: 5),
-                  Row(
-                    children: List.generate(
-                            4,
-                            (index) => Icon(Icons.star,
-                                color: Colors.amber, size: 16)) +
-                        List.generate(
-                            1,
-                            (index) => Icon(Icons.star_border,
-                                color: Colors.grey, size: 16)),
-                  ),
-                ],
-              ),
-            ),
+            _buildTravelHistoryItem('assets/Sidi.jpg', 'Sidi bousaid, Tunis',
+                'Visited March 2024', 4),
             Divider(),
-             ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, '/isatnbul');
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-                child: Image.asset(
-                  'assets/istunbul.jpg',
-                  width: 70,
-                  height: 70,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: Text('Istanbul, Turkey'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Visited March 2024'),
-                  SizedBox(height: 5),
-                  Row(
-                    children: List.generate(
-                            4,
-                            (index) => Icon(Icons.star,
-                                color: Colors.amber, size: 16)) +
-                        List.generate(
-                            1,
-                            (index) => Icon(Icons.star_border,
-                                color: Colors.grey, size: 16)),
-                  ),
-                ],
-              ),
-            ),
+            _buildTravelHistoryItem('assets/istunbul.jpg', 'Istanbul, Turkey',
+                'Visited March 2024', 4),
           ],
         ),
       ),
@@ -197,7 +189,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 52, 27, 97),
         unselectedItemColor: Colors.grey,
-        currentIndex: 3, // Set "Profile" as active
+        currentIndex: 3,
         onTap: (index) {
           if (index == 0) {
             Navigator.pushNamed(context, "/home");
@@ -209,13 +201,45 @@ class ProfilePage extends StatelessWidget {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search_sharp), label: "Search"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Fav"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.search_sharp), label: "Search"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border), label: "Fav"),
-          BottomNavigationBarItem(
-            icon: Image.asset('assets/avv.png', width: 24, height: 24),
+            icon: _profileImage != null
+                ? CircleAvatar(backgroundImage: FileImage(_profileImage!), radius: 12)
+                : Image.asset('assets/avv.png', width: 24, height: 24),
             label: "Profile",
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget pour afficher un élément de l'historique de voyage
+  Widget _buildTravelHistoryItem(String imagePath, String title, String subtitle, int rating) {
+    return ListTile(
+      onTap: () {
+        Navigator.pushNamed(context, '/destination_details');
+      },
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(
+          imagePath,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: Text(title),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(subtitle),
+          SizedBox(height: 5),
+          Row(
+            children: List.generate(
+                    rating, (index) => Icon(Icons.star, color: Colors.amber, size: 16)) +
+                List.generate(
+                    5 - rating, (index) => Icon(Icons.star_border, color: Colors.grey, size: 16)),
           ),
         ],
       ),

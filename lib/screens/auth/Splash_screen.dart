@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer(Duration(seconds: 3), () 
     {
-      Navigator.pushReplacementNamed(context, '/login');
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) 
+      {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else 
+      {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     }
     );
 

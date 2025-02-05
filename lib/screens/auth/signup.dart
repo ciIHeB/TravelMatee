@@ -1,13 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); 
+  final TextEditingController _confirmPasswordController =TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  
+  Future<void> _signup(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        User? user = userCredential.user;
+        if (user != null) {
+          // Save user details in Firestore
+          await _firestore.collection("profile").doc(user.uid).set({
+            "name": _nameController.text.trim(),
+            "email": _emailController.text.trim(),
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Account created successfully!")),
+          );
+
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.message}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -19,7 +61,7 @@ class SignupPage extends StatelessWidget {
             Image.asset(
               'assets/machu_picchu.jpg',
               width: screenWidth,
-              height: screenHeight * 0.37,  
+              height: screenHeight * 0.37,
               fit: BoxFit.cover,
             ),
             Padding(
@@ -29,16 +71,15 @@ class SignupPage extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
                         'assets/llogo.png',
-                        width: screenWidth * 0.1,  
+                        width: screenWidth * 0.1,
                         height: screenWidth * 0.1,
                       ),
-                      SizedBox(width: 10),  
+                      SizedBox(width: 10),
                       Text(
-                        "Create an account ",
+                        "Create an account",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -47,14 +88,13 @@ class SignupPage extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 20),
-                  
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        
-                  TextFormField(
-                   controller: _nameController,
+                        // Full Name Field
+                        TextFormField(
+                          controller: _nameController,
                           decoration: InputDecoration(
                             labelText: 'Full Name',
                             border: OutlineInputBorder(
@@ -64,14 +104,14 @@ class SignupPage extends StatelessWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'name is required';
+                              return 'Name is required';
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 20),
-                        
-                        
+
+                        // Email Field
                         TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
@@ -85,15 +125,16 @@ class SignupPage extends StatelessWidget {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
-                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(value)) {
                               return 'Enter a valid email address';
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 20),
-                        
-                         
+
+                        // Password Field
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
@@ -114,8 +155,8 @@ class SignupPage extends StatelessWidget {
                           },
                         ),
                         SizedBox(height: 20),
-                        
-                        
+
+                        // Confirm Password Field
                         TextFormField(
                           controller: _confirmPasswordController,
                           obscureText: true,
@@ -137,47 +178,38 @@ class SignupPage extends StatelessWidget {
                         ),
                         SizedBox(height: 25),
 
-                         
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/home');
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 135, vertical: 12),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF4F58FD), Color(0xFF149BF3)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
+                        // Sign Up Button
+                        ElevatedButton(
+                          onPressed: () => _signup(context),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 12),
+                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         SizedBox(height: 10),
-                        
-                        
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/login');
-                            },
-                            child: Text(
-                              "Already have an account? Login",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 15,
-                              ),
+
+                        // Login Link
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/login');
+                          },
+                          child: Text(
+                            "Already have an account? Login",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 15,
                             ),
                           ),
                         ),

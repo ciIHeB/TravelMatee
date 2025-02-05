@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class settp extends StatelessWidget {
  Widget build(BuildContext context) {
@@ -48,7 +49,8 @@ class settp extends StatelessWidget {
               title: Text("Logout"),
               subtitle: Text("Sign out of your account."),
               trailing: Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
                Navigator.pushReplacementNamed(context, '/login');
               },
             ),

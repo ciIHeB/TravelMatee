@@ -1,9 +1,94 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
+  @override
+  _EditProfilePageState createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  File? _imageFile;
+  File? _newImageFile;
+  final _picker = ImagePicker();
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  // Charger les données utilisateur depuis Firestore + image locale
+  Future<void> _loadUserProfile() async {
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('profile')
+          .doc(user!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        setState(() {
+          _nameController.text = userDoc['name'] ?? '';
+        });
+      }
+    }
+    await _loadImageFromLocalStorage();
+  }
+
+  // Charger l'image depuis le stockage local
+  Future<void> _loadImageFromLocalStorage() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final localImagePath = '${directory.path}/profile_pic.png';
+    final file = File(localImagePath);
+
+    if (await file.exists()) {
+      setState(() {
+        _imageFile = file;
+      });
+    }
+  }
+
+  // Sélectionner une image depuis la galerie
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _newImageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  // Sauvegarder l'image localement
+  Future<void> _saveImageLocally() async {
+    if (_newImageFile != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/profile_pic.png';
+      await _newImageFile!.copy(path);
+
+      setState(() {
+        _imageFile = _newImageFile;
+      });
+    }
+  }
+
+  // Sauvegarder les modifications
+  Future<void> _saveProfile() async {
+    if (_formKey.currentState!.validate() && user != null) {
+      await FirebaseFirestore.instance.collection('profile').doc(user!.uid).set(
+        {'name': _nameController.text},
+        SetOptions(merge: true),
+      );
+
+      await _saveImageLocally(); // Sauvegarde de l'image après validation
+      Navigator.pop(context, true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +101,7 @@ class EditProfilePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                // Save changes logic here
-                Navigator.pop(context); // Go back to the profile page
-              }
-            },
+            onPressed: _saveProfile,
           ),
         ],
       ),
@@ -36,7 +116,11 @@ class EditProfilePage extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/avv.png'),
+                      backgroundImage: _newImageFile != null
+                          ? FileImage(_newImageFile!)
+                          : _imageFile != null
+                              ? FileImage(_imageFile!)
+                              : AssetImage('assets/avv.png') as ImageProvider,
                       backgroundColor: Colors.transparent,
                     ),
                     Positioned(
@@ -44,9 +128,7 @@ class EditProfilePage extends StatelessWidget {
                       right: 0,
                       child: IconButton(
                         icon: Icon(Icons.camera_alt, color: Colors.blue),
-                        onPressed: () {
-                          // Add logic to change profile picture
-                        },
+                        onPressed: _pickImage,
                       ),
                     ),
                   ],
@@ -70,33 +152,8 @@ class EditProfilePage extends StatelessWidget {
                 },
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email is required';
-                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Enter a valid email address';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Save changes logic here
-                    Navigator.pop(context); // Go back to the profile page
-                  }
-                },
+                onTap: _saveProfile,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 100, vertical: 12),
                   decoration: BoxDecoration(
