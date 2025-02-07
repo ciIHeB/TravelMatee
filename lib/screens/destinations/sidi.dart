@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:azer/favorites_provider.dart';
 
 class sidipage extends StatelessWidget {
-@override
+  @override
   Widget build(BuildContext context) {
+    var favoritesProvider = Provider.of<FavoritesProvider>(context);
+    bool isFavorite = favoritesProvider.isFavorite("sidi");
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Logo
-
-            SizedBox(width: 10), // Space between logo and text
-            // "Search" Text
+            SizedBox(width: 10),
             Text(
               "Detail Destination",
               style: TextStyle(
@@ -23,14 +25,29 @@ class sidipage extends StatelessWidget {
             ),
           ],
         ),
-        backgroundColor: Colors.white, // White background for AppBar
-        elevation: 1, // Add shadow for better separation
-
-        iconTheme: IconThemeData(color: Colors.black), // Icon color
+        backgroundColor: Colors.white,
+        elevation: 1,
+        iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {},
+            onPressed: () {
+              favoritesProvider.toggleFavorite(
+                Destination(
+                  name: "sidi",
+                  imagePath: 'assets/Sidi.jpg',
+                  description: "Luxurious stays in the heart of Sidi.",
+                  route: '/sidi',
+                ),
+              );
+            },
+            icon: Icon(
+              favoritesProvider.isFavorite("sidi")
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: favoritesProvider.isFavorite("sidi")
+                  ? Colors.red
+                  : Colors.grey,
+            ),
           ),
           IconButton(
             icon: Icon(Icons.share),
@@ -73,16 +90,14 @@ class sidipage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       Icon(
                         Icons.location_on,
                         color: Colors.blue,
                       ),
-                      Text("Sidi bousaid, Tunis"),
+                      Text("Sidi Bou Said, Tunis"),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -114,8 +129,7 @@ class sidipage extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    
-"Experience the magic of Sidi Bou Said with charming accommodations, stunning Mediterranean views, and authentic local cuisine. Unwind in serene surroundings or explore the village’s vibrant culture—your ideal getaway awaits.",
+                    "Experience the magic of Sidi Bou Said with charming accommodations, stunning Mediterranean views, and authentic local cuisine. Unwind in serene surroundings or explore the village’s vibrant culture—your ideal getaway awaits.",
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 20),
@@ -125,8 +139,6 @@ class sidipage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  // Validate the form and navigate if valid
-
                   Navigator.pushNamed(context, '/booking');
                 },
                 child: Container(

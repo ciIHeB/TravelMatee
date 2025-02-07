@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:azer/favorites_provider.dart';
 
 class balipage extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
+var favoritesProvider = Provider.of<FavoritesProvider>(context);
+    bool isFavorite = favoritesProvider.isFavorite("bali");
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -29,9 +33,27 @@ class balipage extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black), // Icon color
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {},
+        onPressed: () 
+              {
+                favoritesProvider.toggleFavorite
+                (
+                  Destination(
+                    name: "bali",
+                    imagePath: 'assets/bali.jpg',
+                    description: "Luxurious stays in the heart of bali.",
+                    route: '/bali',
+                  ),
+                );
+              },
+              icon: Icon(
+            favoritesProvider.isFavorite("bali")
+                ? Icons.favorite  // Filled heart when saved
+                : Icons.favorite_border, // Outlined heart when not saved
+            color: favoritesProvider.isFavorite("bali")
+                ? Colors.red  // Red when saved
+                : Colors.grey, // Grey when not saved
           ),
+        ),
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {},

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:azer/favorites_provider.dart';
 
 class parispage extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
+     var favoritesProvider = Provider.of<FavoritesProvider>(context);
+    bool isFavorite = favoritesProvider.isFavorite("Eiffel Dream Retreat");
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -29,9 +33,27 @@ class parispage extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black), // Icon color
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {},
+             onPressed: () 
+              {
+                favoritesProvider.toggleFavorite
+                (
+                  Destination(
+                    name: "Eiffel Dream Retreat",
+                    imagePath: 'assets/paris.jpg',
+                    description: "Luxurious stays in the heart of Paris.",
+                    route: '/paris',
+                  ),
+                );
+              },
+              icon: Icon(
+            favoritesProvider.isFavorite("Eiffel Dream Retreat")
+                ? Icons.favorite  // Filled heart when saved
+                : Icons.favorite_border, // Outlined heart when not saved
+            color: favoritesProvider.isFavorite("Eiffel Dream Retreat")
+                ? Colors.red  // Red when saved
+                : Colors.grey, // Grey when not saved
           ),
+        ),
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {},

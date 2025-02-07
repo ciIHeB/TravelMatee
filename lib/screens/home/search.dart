@@ -1,6 +1,68 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, String>> _allDestinations = [
+    {
+      'imagePath': 'assets/bali.jpg',
+      'title': 'Bali, Indonesia',
+      'subtitle':
+          'Experience the perfect blend of beaches, culture, and spirituality in this tropical paradise.',
+      'route': '/bali',
+    },
+    {
+      'imagePath': 'assets/Sidi.jpg',
+      'title': 'Sidi Bousaid, Tunisia',
+      'subtitle':
+          'Discover Sidi Bou Said with stunning views, local charm, and authentic cuisine. Relax or explore—the perfect escape awaits.',
+      'route': '/sidi',
+    },
+    {
+      'imagePath': 'assets/paris.jpg',
+      'title': 'Paris, France',
+      'subtitle':
+          'Experience Paris with elegant stays, iconic views, and exquisite cuisine. Relax or explore—the city of lights awaits.',
+      'route': '/paris',
+    },
+    {
+      'imagePath': 'assets/istunbul.jpg',
+      'title': 'Istanbul, Turkey',
+      'subtitle':
+          'Experience Istanbul with luxurious stays, breathtaking views, and rich culture. Relax or explore—an unforgettable adventure awaits.',
+      'route': '/destination_details',
+    },
+  ];
+  List<Map<String, String>> _filteredDestinations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredDestinations = _allDestinations; // Initialize with all destinations
+    _searchController.addListener(_onSearchChanged); // Listen for search input
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredDestinations = _allDestinations
+          .where((destination) =>
+              destination['title']!.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -13,15 +75,15 @@ class SearchPage extends StatelessWidget {
             // Logo
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/home'); // Navigate to /home route
+                Navigator.pushNamed(context, '/home');
               },
               child: Image.asset(
                 'assets/llogo.png',
-                width: screenWidth * 0.1, // Adjust logo size
+                width: screenWidth * 0.1,
                 height: screenWidth * 0.1,
               ),
             ),
-            SizedBox(width: 10), // Space between logo and text
+            SizedBox(width: 10),
             // "Search" Text
             Text(
               "Search",
@@ -35,16 +97,16 @@ class SearchPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_none), // Bell icon
+            icon: Icon(Icons.notifications_none),
             onPressed: () {
-              Navigator.pushNamed(context, '/notif');
+              Navigator.pushNamed(context, '/notp');
             },
           ),
         ],
-        backgroundColor: Colors.white, // White background for AppBar
-        elevation: 1, // Add shadow for better separation
+        backgroundColor: Colors.white,
+        elevation: 1,
         automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.black), // Icon color
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,6 +115,7 @@ class SearchPage extends StatelessWidget {
           children: [
             // Search Bar
             TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search for destinations, hotels, or attractions...',
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -65,152 +128,84 @@ class SearchPage extends StatelessWidget {
                 contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               ),
             ),
-            SizedBox(height: 20), // Space between search bar and results
+            SizedBox(height: 20),
             // Search Results Section
             Expanded(
               child: ListView(
-                children: [
-                  // Bali, Indonesia
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                      child: Image.asset(
-                        'assets/bali.jpg',
-                        width: 100, // Increased size
-                        height: 80, // Increased size
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    title: Text(
-                      'Bali, Indonesia',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Experience the perfect blend of beaches, culture, and spirituality in this tropical paradise.',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/bali');
-                    },
-                  ),
-                  Divider(thickness: 1),
-                  
-                  // Sidi Bousaid, Tunisia
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                      child: Image.asset(
-                        'assets/Sidi.jpg',
-                        width: 100, // Increased size
-                        height: 80, // Increased size
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    title: Text(
-                      'Sidi Bousaid, Tunisia',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Discover Sidi Bou Said with stunning views, local charm, and authentic cuisine. Relax or explore—the perfect escape awaits.',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/sidi');
-                    },
-                  ),
-                  Divider(thickness: 1),
-                  
-                  // Paris, France
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                      child: Image.asset(
-                        'assets/paris.jpg',
-                        width: 100, // Increased size
-                        height: 80, // Increased size
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    title: Text(
-                      'Paris, France',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Experience Paris with elegant stays, iconic views, and exquisite cuisine. Relax or explore—the city of lights awaits.',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/paris');
-                    },
-                  ),
-                  Divider(thickness: 1),
-                  
-                  // Istanbul, Turkey
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                      child: Image.asset(
-                        'assets/istunbul.jpg',
-                        width: 100, // Increased size
-                        height: 80, // Increased size
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    title: Text(
-                      'Istanbul, Turkey',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Experience Istanbul with luxurious stays, breathtaking views, and rich culture. Relax or explore—an unforgettable adventure awaits.',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/destination_details');
-                    },
-                  ),
-                ],
+                children: _filteredDestinations
+                    .map((destination) => _buildDestinationTile(
+                          context,
+                          imagePath: destination['imagePath']!,
+                          title: destination['title']!,
+                          subtitle: destination['subtitle']!,
+                          route: destination['route']!,
+                        ))
+                    .toList(),
               ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white, // White background for the navbar
-        selectedItemColor: const Color.fromARGB(255, 52, 27, 97), // Selected item color
-        unselectedItemColor: Colors.grey, // Unselected items color
-        currentIndex: 1, // Set "Search" as active
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color.fromARGB(255, 52, 27, 97),
+        unselectedItemColor: Colors.grey,
+        currentIndex: 1,
         onTap: (index) {
           if (index == 0) {
-            Navigator.pushNamed(context, '/home'); // Navigate to Home page
+            Navigator.pushNamed(context, '/home');
           } else if (index == 2) {
-            Navigator.pushNamed(context, '/fav'); // Navigate to Favorites page
+            Navigator.pushNamed(context, '/fav');
           } else if (index == 3) {
-            Navigator.pushNamed(context, '/profile'); // Navigate to Profile page
+            Navigator.pushNamed(context, '/profile');
           }
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search_sharp), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Fav"),
-          BottomNavigationBarItem(icon: Image.asset('assets/avv.png', width: 24,height: 24,), label: "Profile"),
+          BottomNavigationBarItem(
+            icon: Image.asset('assets/avv.png', width: 24, height: 24),
+            label: "Profile",
+          ),
         ],
       ),
+    );
+  }
+
+  // Helper method to build a destination tile
+  Widget _buildDestinationTile(
+    BuildContext context, {
+    required String imagePath,
+    required String title,
+    required String subtitle,
+    required String route,
+  }) {
+    return ListTile(
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(
+          imagePath,
+          width: 100,
+          height: 80,
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(color: Colors.grey[600]),
+      ),
+      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
     );
   }
 }
