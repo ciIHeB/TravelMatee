@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:azer/favorites_provider.dart';
+import 'package:TravelMate/favorites_provider.dart';
 
 class FavPage extends StatefulWidget {
   @override

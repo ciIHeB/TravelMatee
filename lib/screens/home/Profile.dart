@@ -22,14 +22,11 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadProfileImage();
   }
 
-  
-
-  // Charger le nom de l'utilisateur depuis Firestore
+  // Fetch user profile data
   Future<void> _fetchUserProfile() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot userDoc =
-          await _firestore.collection('profile').doc(user.uid).get();
+      DocumentSnapshot userDoc = await _firestore.collection('profile').doc(user.uid).get();
       if (userDoc.exists) {
         setState(() {
           _name = userDoc['name'] ?? 'No Name';
@@ -38,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // Charger l'image de profil stockée localement
+  // Load profile image from local storage
   Future<void> _loadProfileImage() async {
     final directory = await getApplicationDocumentsDirectory();
     final localImagePath = '${directory.path}/profile_pic.png';
@@ -132,8 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.pushNamed(context, '/edit');
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF4F58FD), Color(0xFF149BF3)],
@@ -177,17 +173,46 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 10),
-            _buildTravelHistoryItem('assets/Sidi.jpg', 'Sidi bousaid, Tunis',
-                'Visited March 2024', 4),
-            Divider(),
-            _buildTravelHistoryItem('assets/istunbul.jpg', 'Istanbul, Turkey',
-                'Visited March 2024', 4),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('profile')
+                    .doc(user?.uid)
+                    .collection('travelHistory')
+                    .orderBy('date', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No travel history yet.',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final trip = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                      return _buildTravelHistoryItem(
+                        trip['imagePath'],
+                        trip['destination'],
+                        trip['date'],
+                        trip['rating'],
+                        trip['route'], // Add route to Firestore data
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedItemColor: const Color.fromARGB(255, 52, 27, 97),
+        selectedItemColor: Color.fromARGB(255, 52, 27, 97),
         unselectedItemColor: Colors.grey,
         currentIndex: 3,
         onTap: (index) {
@@ -214,11 +239,17 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // Widget pour afficher un élément de l'historique de voyage
-  Widget _buildTravelHistoryItem(String imagePath, String title, String subtitle, int rating) {
+  // Widget to build a travel history item
+  Widget _buildTravelHistoryItem(
+    String imagePath, 
+    String title, 
+    String subtitle, 
+    int rating,
+    String route, // Add route parameter
+  ) {
     return ListTile(
       onTap: () {
-        Navigator.pushNamed(context, '/destination_details');
+        Navigator.pushNamed(context, route); // Navigate to the correct route
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -237,9 +268,9 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: 5),
           Row(
             children: List.generate(
-                    rating, (index) => Icon(Icons.star, color: Colors.amber, size: 16)) +
-                List.generate(
-                    5 - rating, (index) => Icon(Icons.star_border, color: Colors.grey, size: 16)),
+              rating, (index) => Icon(Icons.star, color: Colors.amber, size: 16)) +
+              List.generate(
+                5 - rating, (index) => Icon(Icons.star_border, color: Colors.grey, size: 16)),
           ),
         ],
       ),

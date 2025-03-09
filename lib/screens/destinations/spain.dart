@@ -5,16 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:TravelMate/favorites_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class parispage extends StatelessWidget {
+class SpainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var favoritesProvider = Provider.of<FavoritesProvider>(context);
-    bool isFavorite = favoritesProvider.isFavorite("Eiffel Dream Retreat");
+    bool isFavorite = favoritesProvider.isFavorite("Barcelona Seaside Haven");
     double screenWidth = MediaQuery.of(context).size.width;
-      final List<String> imageList = [
-      'assets/paris.jpg',
-      'assets/paris2.jpg',
-      'assets/paris3.png',
+    final List<String> imageList = [
+      'assets/spain.jpg',
+      'assets/spain2.jpg',
+      'assets/spain3.jpg',
     ];
 
     return Scaffold(
@@ -41,18 +41,19 @@ class parispage extends StatelessWidget {
             onPressed: () {
               favoritesProvider.toggleFavorite(
                 Destination(
-                  name: "Eiffel Dream Retreat",
-                  imagePath: 'assets/paris.jpg',
-                  description: "Luxurious stays in the heart of Paris.",
-                  route: '/paris',
+                  name: "Barcelona Seaside Haven",
+                  imagePath: 'assets/spain.jpg',
+                  description:
+                      "A stunning getaway with breathtaking coastal views.",
+                  route: '/spain',
                 ),
               );
             },
             icon: Icon(
-              favoritesProvider.isFavorite("Eiffel Dream Retreat")
+              favoritesProvider.isFavorite("Barcelona Seaside Haven")
                   ? Icons.favorite
                   : Icons.favorite_border,
-              color: favoritesProvider.isFavorite("Eiffel Dream Retreat")
+              color: favoritesProvider.isFavorite("Barcelona Seaside Haven")
                   ? Colors.red
                   : Colors.grey,
             ),
@@ -67,7 +68,7 @@ class parispage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             CarouselSlider(
+            CarouselSlider(
               options: CarouselOptions(
                 height: 250,
                 autoPlay: true,
@@ -94,15 +95,15 @@ class parispage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Eiffel Dream Retreat",
+                        "Barcelona Seaside Haven",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Spacer(),
                       Text(
-                        "\140dt /night",
+                        "\120dt /night",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -115,7 +116,7 @@ class parispage extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.location_on, color: Colors.blue),
-                      Text("Paris, France"),
+                      Text("Barcelona, Spain"),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -126,14 +127,16 @@ class parispage extends StatelessWidget {
                       StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection("destinations")
-                            .doc("Eiffel Dream Retreat")
+                            .doc("Barcelona Seaside Haven")
                             .collection("reviews")
                             .snapshots(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Text("Loading reviews...");
                           }
-                          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
                             return Text("No reviews yet.");
                           }
 
@@ -143,12 +146,14 @@ class parispage extends StatelessWidget {
 
                           for (var doc in snapshot.data!.docs) {
                             final review = doc.data() as Map<String, dynamic>;
-                            final rating = review["rating"] ?? 0; // Handle null values
-                            totalRating += rating.toDouble(); // Ensure numeric type
+                            final rating =
+                                review["rating"] ?? 0; // Handle null values
+                            totalRating +=
+                                rating.toDouble(); // Ensure numeric type
                           }
 
-                          double averageRating = totalReviews > 0 
-                              ? totalRating / totalReviews 
+                          double averageRating = totalReviews > 0
+                              ? totalRating / totalReviews
                               : 0; // Prevent division by zero
 
                           return Text(
@@ -194,7 +199,7 @@ class parispage extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    "Experience the magic of Paris with luxurious stays, iconic city views, and exquisite dining. Unwind in style or immerse yourself in the city's rich culture—an unforgettable Parisian escape.",
+                    "Relax in a stunning seaside resort in Barcelona. Enjoy sun-soaked beaches, vibrant nightlife, and world-class cuisine in the heart of Spain.",
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 20),
@@ -204,7 +209,7 @@ class parispage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/booking', arguments: {'basePrice': 140.0}, );
+                  Navigator.pushNamed(context, '/booking',  arguments: {'basePrice': 120.0}, );
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 120, vertical: 12),
@@ -253,7 +258,7 @@ class parispage extends StatelessWidget {
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection("destinations")
-                      .doc("Eiffel Dream Retreat")
+                      .doc("Barcelona Seaside Haven")
                       .collection("reviews")
                       .orderBy("timestamp", descending: true)
                       .snapshots(),
@@ -282,7 +287,7 @@ class parispage extends StatelessWidget {
                           onDelete: () async {
                             await FirebaseFirestore.instance
                                 .collection("destinations")
-                                .doc("Eiffel Dream Retreat")
+                                .doc("Barcelona Seaside Haven")
                                 .collection("reviews")
                                 .doc(doc.id)
                                 .delete();
@@ -325,10 +330,12 @@ class parispage extends StatelessWidget {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () async {
-                            final User? user = FirebaseAuth.instance.currentUser;
+                            final User? user =
+                                FirebaseAuth.instance.currentUser;
                             if (user == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("You must be logged in!")),
+                                SnackBar(
+                                    content: Text("You must be logged in!")),
                               );
                               return;
                             }
@@ -337,23 +344,25 @@ class parispage extends StatelessWidget {
                             if (_existingReviewId != null) {
                               await FirebaseFirestore.instance
                                   .collection("destinations")
-                                  .doc("Eiffel Dream Retreat")
+                                  .doc("Barcelona Seaside Haven")
                                   .collection("reviews")
                                   .doc(_existingReviewId)
                                   .delete();
                             }
 
                             // Submit new review
-                            DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                            DocumentSnapshot userDoc = await FirebaseFirestore
+                                .instance
                                 .collection("profile")
                                 .doc(user.uid)
                                 .get();
 
-                            String userName = userDoc.get("name") ?? "Anonymous";
+                            String userName =
+                                userDoc.get("name") ?? "Anonymous";
 
                             await FirebaseFirestore.instance
                                 .collection("destinations")
-                                .doc("Eiffel Dream Retreat")
+                                .doc("Barcelona Seaside Haven")
                                 .collection("reviews")
                                 .doc(user.uid)
                                 .set({
@@ -366,7 +375,9 @@ class parispage extends StatelessWidget {
 
                             Navigator.pop(context);
                           },
-                          child: Text(_existingReviewId != null ? "Update Review" : "Submit Review"),
+                          child: Text(_existingReviewId != null
+                              ? "Update Review"
+                              : "Submit Review"),
                         ),
                         if (_existingReviewId != null)
                           TextButton(
@@ -392,7 +403,7 @@ class parispage extends StatelessWidget {
 
     DocumentSnapshot reviewDoc = await FirebaseFirestore.instance
         .collection("destinations")
-        .doc("Eiffel Dream Retreat")
+        .doc("Barcelona Seaside Haven")
         .collection("reviews")
         .doc(user.uid)
         .get();
@@ -402,14 +413,15 @@ class parispage extends StatelessWidget {
 
   // Helper method to build a review item
   Widget _buildReviewItem(
-    String userName, 
-    int rating, 
+    String userName,
+    int rating,
     String comment, {
     VoidCallback? onEdit,
     VoidCallback? onDelete,
   }) {
     final User? user = FirebaseAuth.instance.currentUser;
-    final bool isCurrentUserReview = user != null && userName == (user.displayName ?? "Anonymous");
+    final bool isCurrentUserReview =
+        user != null && userName == (user.displayName ?? "Anonymous");
 
     return ListTile(
       leading: CircleAvatar(child: Text(userName[0])),
@@ -418,11 +430,13 @@ class parispage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: List.generate(5, (index) => Icon(
-              index < rating ? Icons.star : Icons.star_border,
-              color: Colors.amber,
-              size: 16,
-            )),
+            children: List.generate(
+                5,
+                (index) => Icon(
+                      index < rating ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                      size: 16,
+                    )),
           ),
           Text(comment),
         ],

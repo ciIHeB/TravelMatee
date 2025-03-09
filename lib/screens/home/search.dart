@@ -36,13 +36,21 @@ class _SearchPageState extends State<SearchPage> {
           'Experience Istanbul with luxurious stays, breathtaking views, and rich culture. Relax or explore—an unforgettable adventure awaits.',
       'route': '/destination_details',
     },
+    {
+      'imagePath': 'assets/spain.jpg',
+      'title': "Barcelone, Spain",
+      'subtitle':
+          "Relax in a stunning seaside resort in Barcelona. Enjoy sun-soaked beaches, vibrant nightlife, and world-class cuisine in the heart of Spain.",
+      'route': '/spain',
+    },
   ];
   List<Map<String, String>> _filteredDestinations = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredDestinations = _allDestinations; // Initialize with all destinations
+    _filteredDestinations =
+        _allDestinations; // Initialize with all destinations
     _searchController.addListener(_onSearchChanged); // Listen for search input
   }
 
@@ -125,7 +133,8 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               ),
             ),
             SizedBox(height: 20),
@@ -162,8 +171,10 @@ class _SearchPageState extends State<SearchPage> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search_sharp), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Fav"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search_sharp), label: "Search"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border), label: "Fav"),
           BottomNavigationBarItem(
             icon: Image.asset('assets/avv.png', width: 24, height: 24),
             label: "Profile",

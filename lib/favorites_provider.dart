@@ -5,7 +5,7 @@ import 'dart:async';
 
 class Destination {
   final String name;
-  final String imagePath;
+  final imagePath;
   final String description;
   final String route;
 

@@ -1,4 +1,4 @@
-name: azer
+name: TravelMate
 description: "A new Flutter project."
  
 publish_to: 'none'  
@@ -10,6 +10,7 @@ environment:
  
 dependencies:
   curved_navigation_bar: ^1.0.3
+ 
   flutter:
     sdk: flutter
  
@@ -21,6 +22,10 @@ dependencies:
   image_picker: ^1.1.2
   path_provider: ^2.1.5
   shared_preferences: ^2.5.1
+  carousel_slider: ^5.0.0
+  flutter_animate: ^4.5.2
+  animate_do: ^4.2.0
+  firebase_dynamic_links: ^5.5.7
   
   
 
@@ -32,6 +37,7 @@ dev_dependencies:
 
  
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
  
 
 flutter:
@@ -40,5 +46,9 @@ flutter:
   assets:
     - assets/
   
-
+flutter_icons:
+  android: true
+  image_path: "assets/llogo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/llogo.png"
 

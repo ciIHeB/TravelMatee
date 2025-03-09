@@ -99,6 +99,13 @@ class _HomePageStatefulState extends State<HomePage> {
                   'assets/istunbul.jpg',
                   "/destination_details",
                   "Experience Istanbul with luxurious stays, breathtaking views, and rich culture. Relax or explore—an unforgettable adventure awaits."),
+                   buildDestinationCard(
+                  context,
+                  "Barcelone, Spain",
+                  'assets/spain.jpg',
+                  "/spain",
+                  "Relax in a stunning seaside resort in Barcelona. Enjoy sun-soaked beaches, vibrant nightlife, and world-class cuisine in the heart of Spain."),
+            
             ],
           ),
         ),

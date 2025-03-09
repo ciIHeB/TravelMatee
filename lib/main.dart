@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'favorites_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 // Import Screens
 import 'screens/auth/Splash_screen.dart';
 import 'screens/auth/Login.dart';
@@ -16,10 +17,12 @@ import 'screens/destinations/istanbul.dart';
 import 'screens/destinations/paris.dart';
 import 'screens/destinations/bali.dart';
 import 'screens/destinations/sidi.dart';
+import 'screens/destinations/spain.dart';
 import 'screens/booking/booking.dart';
 import 'screens/edit/edit.dart';
 import 'screens/settings/setting.dart';
 import 'screens/settings/notification.dart';
+import 'screens/booking/clicktopay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +49,15 @@ class TravelMateApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "TravelMate",
+       onGenerateRoute: (settings) {
+        if (settings.name == '/booking') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => BookingPage(basePrice: args['basePrice']),
+          );
+        }
+        return null;
+      },
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(),
@@ -58,7 +70,7 @@ class TravelMateApp extends StatelessWidget {
         '/fav': (context) => FavPage(),
         '/search': (context) => SearchPage(),
         '/edit': (context) => EditProfilePage(),
-        '/booking': (context) => BookingPage(),
+        '/clictopay': (context) {final totalPrice = ModalRoute.of(context)!.settings.arguments as double;return ClicToPayApp(totalPrice: totalPrice);},
         '/setting': (context) => settp(),
         '/notp': (context) => notp(),
 
@@ -68,6 +80,7 @@ class TravelMateApp extends StatelessWidget {
         '/paris': (context) => parispage(),
         '/bali': (context) => balipage(),
         '/sidi': (context) => sidipage(),
+        '/spain': (context) => SpainPage(),
       },
     );
   }
